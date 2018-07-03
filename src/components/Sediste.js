@@ -18,8 +18,8 @@ function Sediste(props) {
       onMouseDown={() => props.zapocniIzbor(props.data.id)}
       onMouseOver={izaberi}
     >
-      <span>{props.data.id}</span>
-      <small>{props.data.value}</small>
+      <span>{props.data.value}</span>
+      <small style={styles.lighten}>{props.data.id}</small>
     </div>
   )
 }

@@ -30,5 +30,8 @@ export const styles = {
     marginRight: '8px',
     userSelect: 'none',
     width: 50,
-  }
+  },
+  lighten: {
+    color: 'lightyellow',
+  },
 }
