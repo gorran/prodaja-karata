@@ -18,11 +18,6 @@ npm i
 npm start
 ```
 
-## Usage
-
-Open and edit `./src/index.js`. You'll feel right at home.
-
-
 ## Manual
 
 - `package.json` - Points to the app's main file and lists its details and dependencies.
