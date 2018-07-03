@@ -5,14 +5,12 @@ const initialState = {
   pocetakIzbora: 0,
 }
 
-// TODO: ako je u opsegu samo jedan, i ako je vec izabran, false
-
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'ZAPOCNI_IZBOR': {
       const sedista = state.sedista.map(red => 
         red.map(obj => 
-          ({...obj, selected: obj.id === action.id})
+          ({...obj, selected: obj.id === action.id && !obj.selected})
         )
       )
       return {...state, sedista, pocetakIzbora: action.id}

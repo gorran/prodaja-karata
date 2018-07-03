@@ -6,6 +6,7 @@ const oznake = [
   ['1 L', '2 L', '3 L', '4 L', '5 L', '5 D', '4 D', '3 D', '2 D', '1 D'],
 ]
 
+// prevodi niz vrednosti u niz objekata
 export const sedista = oznake.map(red => 
   red.map(value => (
     {
