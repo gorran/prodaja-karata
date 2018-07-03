@@ -28,6 +28,7 @@ export const styles = {
     height: 50, 
     justifyContent: 'center',
     marginRight: '8px',
+    userSelect: 'none',
     width: 50,
   }
 }
