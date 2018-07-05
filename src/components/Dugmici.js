@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {ipcRenderer} from 'electron'
 
 import {styles} from '../styles'
 
@@ -16,8 +17,8 @@ const stampaj = (sedista) => {
 }
 
 const stampajKartu = () => {
-  console.log('stampajKartu')
-  
+  console.log('saljem zahtev')
+  ipcRenderer.send('stampaj')
 }
 
 function Dugmici (props) {
@@ -28,6 +29,10 @@ function Dugmici (props) {
     </div>
   )
 }
+
+ipcRenderer.on('odstampano', (e, data) => {
+  console.log('odstampano', data)
+})
 
 const mapStateToProps = ({sedista}) => ({sedista})
 

@@ -1,44 +1,57 @@
+const os = require('os')
 const fs = require('fs')
+const path = require('path')
+const url = require('url')
 const electron = require('electron')
 const installer = require('electron-devtools-installer')
 
-const {app, BrowserWindow} = electron
+const {app, BrowserWindow, ipcMain, shell} = electron
 
 let mainWindow
 
 /* FUNCTIONS */
 
-function createWindow () {
+function installDevTools() {
   installer.default(installer['REACT_DEVELOPER_TOOLS'])
       .then(name => console.log(`Added Extension:  ${name}`))
       .catch(err => console.log('An error occurred: ', err))
-  
+}
+
+function createWindow () { 
   mainWindow = new BrowserWindow({width: 800, height: 600})
-  mainWindow.loadURL(`file://${__dirname}/index.html`)
+  const indexPath = url.format({
+    pathname: path.join(__dirname, 'index.html'),
+    protocol: 'file:',
+    slashes: true,
+  })
+  mainWindow.loadURL(indexPath)
   mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', function () {
-    // if you store multi windows in an array, you should delete the corresponding element
     mainWindow = null
   })
 }
 
-function printFile() { 
-  mainWindow.webContents.on('did-finish-load', () => {
-    // {marginsType:2, pageSize:"A4", landscape:false}
-    mainWindow.webContents.printToPDF({}, (error, data) => {
+function printFile(e) { 
+  const tempPdfPath = path.join(os.tmpdir(), 'karte.pdf')
+  const filePdfPath = url.format({
+    pathname: tempPdfPath,
+    protocol: 'file:',
+  })
+
+  mainWindow.webContents.printToPDF({}, (error, data) => {
+    if (error) throw error
+    fs.writeFile(tempPdfPath, data, (error) => {
       if (error) throw error
-      fs.writeFile('karte.pdf', data, (error) => {
-        if (error) throw error
-        console.log('PDF je uspesno sacuvan.')
-      })
+      shell.openExternal(filePdfPath)
+      e.sender.send('odstampano', tempPdfPath)
     })
   })
 }
 
 function init() {
+  installDevTools()
   createWindow()
-  printFile()
 }
 
 /* EVENTS */
@@ -58,3 +71,5 @@ app.on('activate', function () {
     createWindow()
   }
 })
+
+ipcMain.on('stampaj', printFile)

@@ -57,6 +57,10 @@ module.exports = {
     new webpack.DefinePlugin({
       '__DEV__': true
     }),
+    // enable electron in react
+    new webpack.ExternalsPlugin('commonjs', [
+      'electron'
+    ]),
     // Tell webpack we want hot reloading
     new webpack.HotModuleReplacementPlugin(),
     // Watcher doesn't work well if you mistype casing in a path so we use
