@@ -15,6 +15,7 @@ export const reducer = (state = initialState, action) => {
       )
       return {...state, sedista, pocetakIzbora: action.id}
     }
+    // menja sedistima atribut selected
     case 'IZABERI_SEDISTA': {
       const min = Math.min(state.pocetakIzbora, action.id)
       const max = Math.max(state.pocetakIzbora, action.id)

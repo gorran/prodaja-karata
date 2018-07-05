@@ -1,16 +1,16 @@
 import React from 'react'
 
-import logo from './assets/logo.jpg'
-import {styles} from './styles'
 import Sedista from './components/Sedista'
-
-const imePozorista = 'Mali Vuk'
+import Header from './components/Header'
+import Dugmici from './components/Dugmici'
+import {styles} from './styles'
 
 export default function App () {
   return (
     <div style={styles.wrapper}>
-      <h1 style={styles.heading}><img src={logo} style={styles.logo}/> Pozorište {imePozorista}</h1>
+      <Header/>
       <Sedista/>
+      <Dugmici/>
     </div>
   )
 }
