@@ -15,10 +15,16 @@ const stampaj = (sedista) => {
   })
 }
 
+const stampajKartu = () => {
+  console.log('stampajKartu')
+  
+}
+
 function Dugmici (props) {
   return (
     <div>
-      <button onClick={() => stampaj(props.sedista)}>Štampaj</button>
+      {/* <button onClick={() => stampaj(props.sedista)}>Štampaj</button> */}
+      <button onClick={stampajKartu}>Štampaj</button>
     </div>
   )
 }

@@ -14,7 +14,8 @@ module.exports = {
   },
   devServer: {
     contentBase: './',
-    publicPath: 'http://localhost:8080/'
+    publicPath: 'http://localhost:8080/',
+    stats: 'minimal'
   },
   output: {
     pathinfo: true,
