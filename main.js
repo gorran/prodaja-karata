@@ -4,7 +4,6 @@ const path = require('path')
 const url = require('url')
 const electron = require('electron')
 const installer = require('electron-devtools-installer')
-
 const {app, BrowserWindow, ipcMain, shell} = electron
 
 let glavniProzor, stampacProzor
@@ -18,7 +17,7 @@ function instalirajAlate() {
 }
 
 function postaviProzore () { 
-  glavniProzor = new BrowserWindow({width: 800, height: 650})
+  glavniProzor = new BrowserWindow({width: 800, height: 650, icon: 'src/assets/icon.png'})
   const indexPath = url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
