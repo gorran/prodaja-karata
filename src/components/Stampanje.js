@@ -2,8 +2,6 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {ipcRenderer} from 'electron'
 
-import {styles} from '../styles'
-
 const stampaj = (sedista) => {
   const izabranaSedista = sedista.map(red => 
     red.filter(s => s.selected)
@@ -16,16 +14,16 @@ const stampaj = (sedista) => {
   })
 }
 
-const stampajKartu = () => {
+const prosledi = sadrzaj => {
   console.log('saljem zahtev')
-  ipcRenderer.send('stampaj')
+  ipcRenderer.send('proslediZaStampu', sadrzaj)
 }
 
 function Stampanje (props) {
   return (
     <div>
       {/* <button onClick={() => stampaj(props.sedista)}>Štampaj</button> */}
-      <button onClick={stampajKartu}>Štampaj</button>
+      <button onClick={() => prosledi('<h1>Zdravo pozorište</h1>')}>Štampaj</button>
     </div>
   )
 }

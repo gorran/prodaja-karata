@@ -7,51 +7,53 @@ const installer = require('electron-devtools-installer')
 
 const {app, BrowserWindow, ipcMain, shell} = electron
 
-let mainWindow
+let glavniProzor, stampacProzor
 
 /* FUNCTIONS */
 
-function installDevTools() {
+function instalirajAlate() {
   installer.default(installer['REACT_DEVELOPER_TOOLS'])
       .then(name => console.log(`Added Extension:  ${name}`))
       .catch(err => console.log('An error occurred: ', err))
 }
 
-function createWindow () { 
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+function postaviProzore () { 
+  glavniProzor = new BrowserWindow({width: 800, height: 600})
   const indexPath = url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes: true,
   })
-  mainWindow.loadURL(indexPath)
-  mainWindow.webContents.openDevTools()
+  glavniProzor.loadURL(indexPath)
+  glavniProzor.webContents.openDevTools()
+  glavniProzor.on('closed', () => glavniProzor = null)
 
-  mainWindow.on('closed', function () {
-    mainWindow = null
-  })
+  stampacProzor = new BrowserWindow()
+  stampacProzor.loadURL('file://' + __dirname + '/stampac.html')
+  stampacProzor.hide()
+  stampacProzor.on('closed', () => stampacProzor = null)
 }
 
-function printFile(e) { 
+function stampajFajl(e) { 
   const pathname = path.join(os.tmpdir(), 'karte.pdf')
   const filePath = url.format({
     pathname,
     protocol: 'file:',
   })
 
-  mainWindow.webContents.printToPDF({}, (error, data) => {
+  stampacProzor.webContents.printToPDF({}, (error, data) => {
     if (error) throw error
     fs.writeFile(pathname, data, (error) => {
       if (error) throw error
+      glavniProzor.webContents.send('odstampano', pathname)
       shell.openExternal(filePath)
-      e.sender.send('odstampano', pathname)
     })
   })
 }
 
 function init() {
-  installDevTools()
-  createWindow()
+  instalirajAlate()
+  postaviProzore()
 }
 
 /* EVENTS */
@@ -59,13 +61,13 @@ function init() {
 app.on('ready', init)
 
 app.on('window-all-closed', () => {
-  // On OS X stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') app.quit()
 })
 
 app.on('activate', () => {
-  // On OS X re-create a window in the app when the dock icon is clicked and no window open
-  if (mainWindow === null) createWindow()
+  if (glavniProzor === null) postaviProzore()
 })
 
-ipcMain.on('stampaj', printFile)
+ipcMain.on('proslediZaStampu', (event, sadrzaj) => stampacProzor.webContents.send('proslediZaStampu', sadrzaj))
+
+ipcMain.on('spremanZaStampu', stampajFajl)

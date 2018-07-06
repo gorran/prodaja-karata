@@ -1,0 +1,11 @@
+<head></head>
+<body>
+  <script>
+    const ipcRenderer = require('electron').ipcRenderer
+  
+    ipcRenderer.on('proslediZaStampu', (event, sadrzaj) => {
+      document.body.innerHTML = sadrzaj
+      ipcRenderer.send('spremanZaStampu')
+    })
+  </script>
+</body>
