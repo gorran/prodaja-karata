@@ -1,7 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 
-import {sedista} from '../data/sedista'
 import Sediste from './Sediste'
 import {styles} from '../styles'
 
