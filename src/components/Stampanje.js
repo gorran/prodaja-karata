@@ -2,10 +2,14 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {ipcRenderer} from 'electron'
 
-const stampaj = (sedista) => {
-  const izabranaSedista = sedista.map(red => 
-    red.filter(s => s.selected)
-  )
+import {flatten} from '../shared/helpers'
+
+const stampaj = sedista => {
+  if (!flatten(sedista).filter(s => s.selected).length)
+    return console.log('Nema izabranih sedista.')
+
+  const izabranaSedista = sedista.map(red => red.filter(s => s.selected))
+
   izabranaSedista.map((red, i) => {
     if (!red.length) return
     const oblik = red.length > 1 ? 'sedista' : 'sediste'
@@ -15,21 +19,20 @@ const stampaj = (sedista) => {
 }
 
 const prosledi = sadrzaj => {
-  console.log('saljem zahtev')
   ipcRenderer.send('proslediZaStampu', sadrzaj)
 }
 
 function Stampanje (props) {
   return (
     <div>
-      {/* <button onClick={() => stampaj(props.sedista)}>Štampaj</button> */}
-      <button onClick={() => prosledi('<h1>Zdravo pozorište</h1>')}>Štampaj</button>
+      <button onClick={() => stampaj(props.sedista)}>Štampaj</button>
+      <button onClick={() => prosledi('<h1>Zdravo pozorište</h1>')}>Štampaj fajl</button>
     </div>
   )
 }
 
 ipcRenderer.on('odstampano', (e, data) => {
-  console.log('odstampano', data)
+  console.log('Fajl je sacuvan na adresi:', data)
 })
 
 const mapStateToProps = ({sedista}) => ({sedista})
