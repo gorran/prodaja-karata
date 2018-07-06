@@ -21,7 +21,7 @@ const stampajKartu = () => {
   ipcRenderer.send('stampaj')
 }
 
-function Dugmici (props) {
+function Stampanje (props) {
   return (
     <div>
       {/* <button onClick={() => stampaj(props.sedista)}>Štampaj</button> */}
@@ -36,4 +36,4 @@ ipcRenderer.on('odstampano', (e, data) => {
 
 const mapStateToProps = ({sedista}) => ({sedista})
 
-export default connect(mapStateToProps)(Dugmici)
+export default connect(mapStateToProps)(Stampanje)

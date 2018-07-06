@@ -18,9 +18,10 @@ npm i
 npm start
 ```
 
-## Manual
+## TODO
 
-- `package.json` - Points to the app's main file and lists its details and dependencies.
-- `main.js` - Starts the app and creates a browser window to render HTML. This is the app's **main process**.
-- `index.html` - A web page to render. This is the app's **renderer process**.
-- `src/index.js` - Your javascript entry point.
+- https://github.com/hokein/electron-sample-apps/blob/master/printing/readme.md
+- https://stackoverflow.com/questions/32274265/print-from-electron-application
+- https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/
+- Need a way to pass data directly to printer for RAW printing to thermal and label printers. The same functionality available in node-print call printDirect()
+- https://github.com/marcopiraccini/electron-printer

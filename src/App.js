@@ -2,7 +2,7 @@ import React from 'react'
 
 import Sedista from './components/Sedista'
 import Header from './components/Header'
-import Dugmici from './components/Dugmici'
+import Stampanje from './components/Stampanje'
 import {styles} from './styles'
 
 export default function App () {
@@ -10,7 +10,7 @@ export default function App () {
     <div style={styles.wrapper}>
       <Header/>
       <Sedista/>
-      <Dugmici/>
+      <Stampanje/>
     </div>
   )
 }

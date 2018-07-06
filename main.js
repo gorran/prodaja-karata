@@ -33,18 +33,18 @@ function createWindow () {
 }
 
 function printFile(e) { 
-  const tempPdfPath = path.join(os.tmpdir(), 'karte.pdf')
-  const filePdfPath = url.format({
-    pathname: tempPdfPath,
+  const pathname = path.join(os.tmpdir(), 'karte.pdf')
+  const filePath = url.format({
+    pathname,
     protocol: 'file:',
   })
 
   mainWindow.webContents.printToPDF({}, (error, data) => {
     if (error) throw error
-    fs.writeFile(tempPdfPath, data, (error) => {
+    fs.writeFile(pathname, data, (error) => {
       if (error) throw error
-      shell.openExternal(filePdfPath)
-      e.sender.send('odstampano', tempPdfPath)
+      shell.openExternal(filePath)
+      e.sender.send('odstampano', pathname)
     })
   })
 }
@@ -58,18 +58,14 @@ function init() {
 
 app.on('ready', init)
 
-app.on('window-all-closed', function () {
+app.on('window-all-closed', () => {
   // On OS X stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  if (process.platform !== 'darwin') app.quit()
 })
 
-app.on('activate', function () {
+app.on('activate', () => {
   // On OS X re-create a window in the app when the dock icon is clicked and no window open
-  if (mainWindow === null) {
-    createWindow()
-  }
+  if (mainWindow === null) createWindow()
 })
 
 ipcMain.on('stampaj', printFile)
