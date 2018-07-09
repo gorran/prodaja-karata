@@ -2,10 +2,18 @@
 <body>
   <script>
     const ipcRenderer = require('electron').ipcRenderer
-  
-    ipcRenderer.on('proslediZaStampu', (event, sadrzaj) => {
+
+    const posalji = (sadrzaj, dogadjaj) => {
       document.body.innerHTML = sadrzaj
-      ipcRenderer.send('spremanZaStampu')
-    })
+      ipcRenderer.send(dogadjaj)
+    }
+  
+    ipcRenderer.on('proslediZaStampu', (event, sadrzaj) => 
+      posalji(sadrzaj, 'spremanZaStampu')
+    )
+
+    ipcRenderer.on('proslediZaFajl', (event, sadrzaj) => 
+      posalji(sadrzaj, 'spremanZaFajl')
+    )
   </script>
 </body>

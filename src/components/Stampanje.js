@@ -2,19 +2,15 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {ipcRenderer} from 'electron'
 import {flatten} from '../shared/helpers'
+import { log } from 'util';
 
-ipcRenderer.on('odstampano', (e, data) => {
+ipcRenderer.on('sacuvano', (e, data) => {
   console.log(`Fajl je sacuvan na adresi: ${data}`)
 })
 
-const stampaj = sedista => {
-  if (!flatten(sedista).filter(s => s.selected).length)
-    return alert("Niste izabrali sedista.")
-
-  const izabranaSedista = sedista.map(red => red.filter(s => s.selected))
-  const sablon = praviSablon(izabranaSedista)
-  ipcRenderer.send('proslediZaStampu', sablon)
-}
+ipcRenderer.on('odstampano', (e, success) => {
+  console.log(`Stampanje ${success ? '' : 'ni'}je krenulo.`)
+})
 
 const praviSablon = izabranaSedista => {
   let sablon = ``
@@ -28,11 +24,27 @@ const praviSablon = izabranaSedista => {
   return sablon
 }
 
-const Stampanje = props => (
-  <div>
-    <button onClick={() => stampaj(props.sedista)}>Štampaj</button>
-  </div>
-)
+const Stampanje = props => {
+
+  const prosledi = dogadjaj => {   
+    if (!flatten(props.sedista).filter(s => s.selected).length)
+      return alert("Niste izabrali sedista.")
+    const izabranaSedista = props.sedista.map(red => red.filter(s => s.selected))
+    const sablon = praviSablon(izabranaSedista)
+    ipcRenderer.send(dogadjaj, sablon)
+  }
+  
+  const stampaj = () => prosledi('proslediZaStampu')
+  
+  const sacuvaj = () => prosledi('proslediZaFajl')
+  
+  return (
+    <div>
+      <button onClick={() => stampaj()}>Štampaj</button>
+      <button onClick={() => sacuvaj()}>Sačuvaj PDF</button>
+    </div>
+  )
+}
 
 const mapStateToProps = ({sedista}) => ({sedista})
 

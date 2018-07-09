@@ -33,18 +33,23 @@ function postaviProzore () {
   stampacProzor.on('closed', () => stampacProzor = null)
 }
 
-function stampajFajl(e) { 
+function stampaj(e) { 
+  stampacProzor.webContents.print({}, success => 
+    glavniProzor.webContents.send('odstampano', success)
+  )
+}
+
+function sacuvajFajl(e) { 
   const pathname = path.join(os.tmpdir(), 'karte.pdf')
   const filePath = url.format({
-    pathname,
     protocol: 'file:',
+    pathname,
   })
-
   stampacProzor.webContents.printToPDF({}, (error, data) => {
     if (error) throw error
     fs.writeFile(pathname, data, (error) => {
       if (error) throw error
-      glavniProzor.webContents.send('odstampano', pathname)
+      glavniProzor.webContents.send('sacuvano', pathname)
       shell.openExternal(filePath)
     })
   })
@@ -67,6 +72,14 @@ app.on('activate', () => {
   if (glavniProzor === null) postaviProzore()
 })
 
-ipcMain.on('proslediZaStampu', (event, sadrzaj) => stampacProzor.webContents.send('proslediZaStampu', sadrzaj))
+ipcMain.on('proslediZaStampu', (event, sadrzaj) => 
+  stampacProzor.webContents.send('proslediZaStampu', sadrzaj)
+)
 
-ipcMain.on('spremanZaStampu', stampajFajl)
+ipcMain.on('proslediZaFajl', (event, sadrzaj) => 
+  stampacProzor.webContents.send('proslediZaFajl', sadrzaj)
+)
+
+ipcMain.on('spremanZaStampu', stampaj)
+
+ipcMain.on('spremanZaFajl', sacuvajFajl)
